@@ -1,119 +1,267 @@
-import type {
-    CurrencyCode,
-      Transaction,
-      } from '../../models/types';
 
-      import {
-        money,
-        } from '../../utils/currency';
+           import type {
+  CurrencyCode,
+  Transaction,
+} from '../../models/types';
 
-        type Group = {
-          title: string;
-            rows: Transaction[];
-              hideQuantityColumns?: boolean;
-              };
+import {
+  money,
+} from '../../utils/currency';
 
-              type Props = {
-                groups: Group[];
-                  currency: CurrencyCode;
-                    convert: (value: number) => number;
+type Group = {
+  title: string;
+  rows: Transaction[];
+  hideQuantityColumns?: boolean;
+};
 
-                      hideQuantityColumns?: boolean;
-                        showNotesColumn?: boolean;
-                        };
+type Props = {
+  groups: Group[];
+  currency: CurrencyCode;
+  convert: (value: number) => number;
 
-                        export default function AccountTable({
-                          groups,
-                            currency,
-                              convert,
-                                hideQuantityColumns = false,
-                                  showNotesColumn = true,
-                                  }: Props) {
-                                    return (
-                                        <div className="table-wrap">
-                                              <table className="account-table">
-                                                      <tbody>
-                                                                {groups.map(group => (
-                                                                            <GroupRows
-                                                                                          key={group.title}
-                                                                                                        title={group.title}
-                                                                                                                      rows={group.rows}
-                                                                                                                                    currency={currency}
-                                                                                                                                                  convert={convert}
-                                                                                                                                                                hideQuantityColumns={
-                                                                                                                                                                                group.hideQuantityColumns ??
-                                                                                                                                                                                                hideQuantityColumns
-                                                                                                                                                                                                              }
-                                                                                                                                                                                                                            showNotesColumn={showNotesColumn}
-                                                                                                                                                                                                                                        />
-                                                                                                                                                                                                                                                  ))}
-                                                                                                                                                                                                                                                          </tbody>
-                                                                                                                                                                                                                                                                </table>
-                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                      );
-                                                                                                                                                                                                                                                                      }
+  hideQuantityColumns?: boolean;
+  showNotesColumn?: boolean;
+};
 
-                                                                                                                                                                                                                                                                      type GroupRowsProps = {
-                                                                                                                                                                                                                                                                        title: string;
-                                                                                                                                                                                                                                                                          rows: Transaction[];
-                                                                                                                                                                                                                                                                            currency: CurrencyCode;
-                                                                                                                                                                                                                                                                              convert: (value: number) => number;
+const formatRate = (value: number) => {
+  if (!Number.isFinite(value) || value <= 0) {
+    return '-';
+  }
 
-                                                                                                                                                                                                                                                                                hideQuantityColumns: boolean;
-                                                                                                                                                                                                                                                                                  showNotesColumn: boolean;
-                                                                                                                                                                                                                                                                                  };
+  return value.toLocaleString('en-US', {
+    maximumFractionDigits: 4,
+  });
+};
 
-                                                                                                                                                                                                                                                                                  function GroupRows({
-                                                                                                                                                                                                                                                                                    title,
-                                                                                                                                                                                                                                                                                      rows,
-                                                                                                                                                                                                                                                                                        currency,
-                                                                                                                                                                                                                                                                                          convert,
-                                                                                                                                                                                                                                                                                            hideQuantityColumns,
-                                                                                                                                                                                                                                                                                              showNotesColumn,
-                                                                                                                                                                                                                                                                                              }: GroupRowsProps) {
-                                                                                                                                                                                                                                                                                                const fullColSpan =
-                                                                                                                                                                                                                                                                                                    6 + (showNotesColumn ? 1 : 0);
+const getExchangeDetails = (
+  row: Transaction,
+  displayCurrency: CurrencyCode,
+  convertedAmount: number
+) => {
+  if (row.currency === displayCurrency) {
+    return null;
+  }
 
-                                                                                                                                                                                                                                                                                                      return (
-                                                                                                                                                                                                                                                                                                          <>
-                                                                                                                                                                                                                                                                                                                <tr className="section-row">
-                                                                                                                                                                                                                                                                                                                        <td colSpan={fullColSpan}>
-                                                                                                                                                                                                                                                                                                                                  {title}
-                                                                                                                                                                                                                                                                                                                                          </td>
-                                                                                                                                                                                                                                                                                                                                                </tr>
+  let rate = row.exchangeRate;
 
-                                                                                                                                                                                                                                                                                                                                                      <tr>
-                                                                                                                                                                                                                                                                                                                                                              <th style={{ width: 110 }}>
-                                                                                                                                                                                                                                                                                                                                                                        التاريخ
-                                                                                                                                                                                                                                                                                                                                                                                </th>
+  if (
+    displayCurrency !== 'YER' &&
+    convertedAmount > 0
+  ) {
+    rate =
+      row.amountYER / convertedAmount;
+  }
 
-                                                                                                                                                                                                                                                                                                                                                                                        <th
-                                                                                                                                                                                                                                                                                                                                                                                                  colSpan={
-                                                                                                                                                                                                                                                                                                                                                                                                              hideQuantityColumns
-                                                                                                                                                                                                                                                                                                                                                                                                                            ? 3
-                                                                                                                                                                                                                                                                                                                                                                                                                                          : 1
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            >
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                      البيان
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </th>
+  if (
+    displayCurrency === 'YER' &&
+    row.originalAmount > 0
+  ) {
+    rate =
+      row.amountYER / row.originalAmount;
+  }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      {!hideQuantityColumns && (
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <th style={{ width: 70 }}>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          الكمية
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </th>
+  return {
+    original: money(
+      row.originalAmount,
+      row.currency
+    ),
+    rateText: formatRate(rate),
+  };
+};
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <th style={{ width: 70 }}>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                الوحدة
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </th>
+export default function AccountTable({
+  groups,
+  currency,
+  convert,
+  hideQuantityColumns = false,
+  showNotesColumn = true,
+}: Props) {
+  return (
+    <div className="table-wrap">
+      <table className="account-table">
+        <tbody>
+          {groups.map(group => (
+            <GroupRows
+              key={group.title}
+              title={group.title}
+              rows={group.rows}
+              currency={currency}
+              convert={convert}
+              hideQuantityColumns={
+                group.hideQuantityColumns ??
+                hideQuantityColumns
+              }
+              showNotesColumn={showNotesColumn}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <th style={{ width: 110 }}>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      سعر الوحدة
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </th>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    )}
+type GroupRowsProps = {
+  title: string;
+  rows: Transaction[];
+  currency: CurrencyCode;
+  convert: (value: number) => number;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <th
+  hideQuantityColumns: boolean;
+  showNotesColumn: boolean;
+};
+
+function GroupRows({
+  title,
+  rows,
+  currency,
+  convert,
+  hideQuantityColumns,
+  showNotesColumn,
+}: GroupRowsProps) {
+  const fullColSpan =
+    6 + (showNotesColumn ? 1 : 0);
+
+  return (
+    <>
+      <tr className="section-row">
+        <td colSpan={fullColSpan}>
+          {title}
+        </td>
+      </tr>
+
+      <tr>
+        <th style={{ width: 110 }}>
+          التاريخ
+        </th>
+
+        <th
+          colSpan={
+            hideQuantityColumns
+              ? 3
+              : 1
+          }
+        >
+          البيان
+        </th>
+
+        {!hideQuantityColumns && (
+          <>
+            <th style={{ width: 70 }}>
+              الكمية
+            </th>
+
+            <th style={{ width: 70 }}>
+              الوحدة
+            </th>
+
+            <th style={{ width: 110 }}>
+              سعر الوحدة
+            </th>
+          </>
+        )}
+
+        <th
+          style={{ width: 150 }}
+          colSpan={
+            hideQuantityColumns
+              ? 2
+              : 1
+          }
+        >
+          الإجمالي
+        </th>
+
+        {showNotesColumn && (
+          <th style={{ width: 180 }}>
+            الملاحظات
+          </th>
+        )}
+      </tr>
+
+      {rows.map(row => {
+        const convertedAmount =
+          convert(row.amountYER);
+
+        const exchangeDetails =
+          getExchangeDetails(
+            row,
+            currency,
+            convertedAmount
+          );
+
+        return (
+          <tr key={row.id}>
+            <td>
+              {row.date}
+            </td>
+
+            <td
+              colSpan={
+                hideQuantityColumns
+                  ? 3
+                  : 1
+              }
+            >
+              {row.title}
+            </td>
+
+            {!hideQuantityColumns && (
+              <>
+                <td>
+                  {row.quantity ?? '-'}
+                </td>
+
+                <td>
+                  {row.unit ?? '-'}
+                </td>
+
+                <td>
+                  {row.unitPrice
+                    ? money(
+                        row.unitPrice,
+                        row.currency
+                      )
+                    : '-'}
+                </td>
+              </>
+            )}
+
+            <td
+              colSpan={
+                hideQuantityColumns
+                  ? 2
+                  : 1
+              }
+            >
+              {money(
+                convertedAmount,
+                currency
+              )}
+
+              {exchangeDetails && (
+                <span className="note">
+                  الأصل:
+                  {' '}
+                  {exchangeDetails.original}
+                  <br />
+                  سعر الصرف:
+                  {' '}
+                  {exchangeDetails.rateText}
+                </span>
+              )}
+            </td>
+
+            {showNotesColumn && (
+              <td>
+                {row.notes || '-'}
+              </td>
+            )}
+          </tr>
+        );
+      })}
+    </>
+  );
+        }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <th
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       style={{ width: 150 }}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 colSpan={
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             hideQuantityColumns
