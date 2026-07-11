@@ -11,6 +11,11 @@ const BACKUP_PREFIX = 'dftr-';
 const APP_FOLDER = 'دفتر المقاول';
 const BACKUP_FOLDER = 'دفتر المقاول/النسخ الاحتياطية';
 
+const EXCLUDED_KEYS = [
+  'dftr-license-state',
+  'dftr-device-code',
+];
+
 export type BackupFile = {
   app: string;
   version: number;
@@ -28,6 +33,18 @@ const getDateTimeName = () => {
   const min = String(d.getMinutes()).padStart(2, '0');
 
   return `${yyyy}-${mm}-${dd}-${hh}-${min}`;
+};
+
+const shouldBackupKey = (key: string) => {
+  if (!key.startsWith(BACKUP_PREFIX)) {
+    return false;
+  }
+
+  if (EXCLUDED_KEYS.includes(key)) {
+    return false;
+  }
+
+  return true;
 };
 
 const ensureAppFolders = async () => {
@@ -60,7 +77,7 @@ export function createBackupFile() {
 
     if (!key) continue;
 
-    if (key.startsWith(BACKUP_PREFIX)) {
+    if (shouldBackupKey(key)) {
       const value = localStorage.getItem(key);
 
       if (value !== null) {
@@ -101,10 +118,11 @@ export async function downloadBackup() {
       recursive: true,
     });
 
-    const fileUri = await Filesystem.getUri({
-      path: filePath,
-      directory: Directory.Documents,
-    });
+    const fileUri =
+      await Filesystem.getUri({
+        path: filePath,
+        directory: Directory.Documents,
+      });
 
     await Share.share({
       title: 'نسخة احتياطية - دفتر المقاول',
@@ -167,7 +185,7 @@ export async function restoreBackupFromFile(
   Object.entries(parsed.data).forEach(
     ([key, value]) => {
       if (
-        key.startsWith(BACKUP_PREFIX) &&
+        shouldBackupKey(key) &&
         typeof value === 'string'
       ) {
         localStorage.setItem(key, value);
@@ -176,4 +194,4 @@ export async function restoreBackupFromFile(
   );
 
   return true;
-}
+      }
