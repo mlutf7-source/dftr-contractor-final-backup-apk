@@ -1,191 +1,275 @@
 import {
-    Link,
-      Outlet,
-        useParams,
-        } from 'react-router-dom';
+  Link,
+  Outlet,
+  useParams,
+} from 'react-router-dom';
 
-        import { useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
-        import type { Project } from '../../models/types';
+import type { Project } from '../../models/types';
 
-        import {
-          getProject,
-            saveProject,
-            } from '../../database/database';
+import {
+  getProject,
+  saveProject,
+} from '../../database/database';
 
-            import {
-              getProjectSummary,
-              } from '../../database/calculations';
+import {
+  getProjectSummary,
+} from '../../database/calculations';
 
-              import {
-                money,
-                } from '../../utils/currency';
+import {
+  money,
+} from '../../utils/currency';
 
-                import TopTabs from '../../components/layout/TopTabs';
-                import HeroCard from '../../components/layout/HeroCard';
+import TopTabs from '../../components/layout/TopTabs';
+import HeroCard from '../../components/layout/HeroCard';
 
-                import './ProjectLayout.css';
+import './ProjectLayout.css';
 
-                type FinanceCardProps = {
-                  title: string;
-                    value: number;
-                      status: string;
-                        color: string;
-                        };
+type FinanceCardProps = {
+  title: string;
+  value: number;
+  status: string;
+  color: string;
+};
 
-                        function FinanceCard({
-                          title,
-                            value,
-                              status,
-                                color,
-                                }: FinanceCardProps) {
-                                  const colorClass =
-                                      color === 'red' ? 'red' : 'blue';
+function FinanceCard({
+  title,
+  value,
+  status,
+  color,
+}: FinanceCardProps) {
+  const colorClass =
+    color === 'red' ? 'red' : 'blue';
 
-                                        return (
-                                            <div className="finance-card">
-                                                  <span>{title}</span>
+  return (
+    <div className="finance-card">
+      <span>{title}</span>
 
-                                                        <strong className={colorClass}>
-                                                                {money(value || 0, 'YER')}
-                                                                      </strong>
+      <strong className={colorClass}>
+        {money(value || 0, 'YER')}
+      </strong>
 
-                                                                            <i
-                                                                                    className={
-                                                                                              color === 'red'
-                                                                                                          ? 'pill-red'
-                                                                                                                      : 'pill-green'
-                                                                                                                              }
-                                                                                                                                    >
-                                                                                                                                            {status || '-'}
-                                                                                                                                                  </i>
-                                                                                                                                                      </div>
-                                                                                                                                                        );
-                                                                                                                                                        }
+      <i
+        className={
+          color === 'red'
+            ? 'pill-red'
+            : 'pill-green'
+        }
+      >
+        {status || '-'}
+      </i>
+    </div>
+  );
+}
 
-                                                                                                                                                        export default function ProjectLayout() {
-                                                                                                                                                          const { id = '' } = useParams();
-
-const project =
-  getProject(id) || null;
+export default function ProjectLayout() {
+  const { id = '' } = useParams();
 
   const [p, setP] =
-    useState<Project | null>(project);
+    useState<Project | null>(() =>
+      getProject(id) || null
+    );
 
-                                                                                                                                                                    if (!p) {
-                                                                                                                                                                        return (
-                                                                                                                                                                              <div className="project-page">
-                                                                                                                                                                                      <div className="project-container">
-                                                                                                                                                                                                <Link
-                                                                                                                                                                                                            to="/"
-                                                                                                                                                                                                                        className="project-back-btn"
-                                                                                                                                                                                                                                  >
-                                                                                                                                                                                                                                              ← رجوع
-                                                                                                                                                                                                                                                        </Link>
+  const refreshProject = useCallback(() => {
+    const latest =
+      getProject(id) || null;
 
-                                                                                                                                                                                                                                                                  <div className="empty-state">
-                                                                                                                                                                                                                                                                              المشروع غير موجود
-                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                      </div>
-                                                                                                                                                                                                                                                                                                          );
-                                                                                                                                                                                                                                                                                                            }
+    setP(latest);
+  }, [id]);
 
-                                                                                                                                                                                                                                                                                                              const updateProject = (updated: Project) => {
-                                                                                                                                                                                                                                                                                                                  saveProject(updated);
-                                                                                                                                                                                                                                                                                                                      setP(updated);
-                                                                                                                                                                                                                                                                                                                        };
+  useEffect(() => {
+    refreshProject();
+  }, [refreshProject]);
 
-                                                                                                                                                                                                                                                                                                                          const summary: any = getProjectSummary(p);
+  useEffect(() => {
+    const handleFocus = () => {
+      refreshProject();
+    };
 
-                                                                                                                                                                                                                                                                                                                            const owner =
-                                                                                                                                                                                                                                                                                                                                summary?.owner || {
-                                                                                                                                                                                                                                                                                                                                      displayBalance: 0,
-                                                                                                                                                                                                                                                                                                                                            status: '-',
-                                                                                                                                                                                                                                                                                                                                                  color: 'blue',
-                                                                                                                                                                                                                                                                                                                                                      };
+    const handleVisibility = () => {
+      if (!document.hidden) {
+        refreshProject();
+      }
+    };
 
-                                                                                                                                                                                                                                                                                                                                                        const contractor =
-                                                                                                                                                                                                                                                                                                                                                            summary?.contractor || {
-                                                                                                                                                                                                                                                                                                                                                                  displayBalance: 0,
-                                                                                                                                                                                                                                                                                                                                                                        status: '-',
-                                                                                                                                                                                                                                                                                                                                                                              color: 'blue',
-                                                                                                                                                                                                                                                                                                                                                                                  };
+    window.addEventListener(
+      'focus',
+      handleFocus
+    );
 
-                                                                                                                                                                                                                                                                                                                                                                                    const subcontractors =
-                                                                                                                                                                                                                                                                                                                                                                                        summary?.subcontractors || {
-                                                                                                                                                                                                                                                                                                                                                                                              displayBalance: 0,
-                                                                                                                                                                                                                                                                                                                                                                                                    status: '-',
-                                                                                                                                                                                                                                                                                                                                                                                                          color: 'blue',
-                                                                                                                                                                                                                                                                                                                                                                                                              };
+    document.addEventListener(
+      'visibilitychange',
+      handleVisibility
+    );
 
-const cashBox =
-  summary?.cash || {
+    return () => {
+      window.removeEventListener(
+        'focus',
+        handleFocus
+      );
+
+      document.removeEventListener(
+        'visibilitychange',
+        handleVisibility
+      );
+    };
+  }, [refreshProject]);
+
+  const updateProject = (
+    updated: Project
+  ) => {
+    const saved = saveProject({
+      ...updated,
+      updatedAt:
+        updated.updatedAt ||
+        new Date().toISOString(),
+    });
+
+    setP(saved);
+
+    return saved;
+  };
+
+  if (!p) {
+    return (
+      <div className="project-page">
+        <div className="project-container">
+          <Link
+            to="/"
+            className="project-back-btn"
+          >
+            ← رجوع
+          </Link>
+
+          <div className="empty-state">
+            المشروع غير موجود
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const summary: any =
+    getProjectSummary(p);
+
+  const owner =
+    summary?.owner || {
       displayBalance: 0,
-          status: '-',
-              color: 'blue',
-                };
-                                                                                                                                                                                                                                                                                                                                                                                                                                                return (
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div className="project-page">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          <div className="project-container">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <TopTabs />
+      status: '-',
+      color: 'blue',
+    };
 
+  const contractor =
+    summary?.contractor || {
+      displayBalance: 0,
+      status: '-',
+      color: 'blue',
+    };
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <HeroCard
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      projectName={p.name}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ownerName={p.ownerName}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          projectCode={p.code}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    status={p.status}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              startDate={p.startDate}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        currency="ريال يمني"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  total={money(
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              owner.displayBalance || 0,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          'YER'
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    )}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            />
+  const subcontractors =
+    summary?.subcontractors || {
+      displayBalance: 0,
+      status: '-',
+      color: 'blue',
+    };
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div className="finance-grid">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <FinanceCard
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          title="حساب المالك"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      value={owner.displayBalance || 0}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  status={owner.status || '-'}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              color={owner.color || 'blue'}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        />
+  const cashBox =
+    summary?.cash || {
+      displayBalance: 0,
+      status: '-',
+      color: 'blue',
+    };
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <FinanceCard
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              title="حساب المقاول"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          value={contractor.displayBalance || 0}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      status={contractor.status || '-'}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  color={contractor.color || 'blue'}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            />
+  return (
+    <div className="project-page">
+      <div className="project-container">
+        <TopTabs />
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <FinanceCard
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  title="مقاولو الباطن"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              value={subcontractors.displayBalance || 0}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          status={subcontractors.status || '-'}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      color={subcontractors.color || 'blue'}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                />
+        <HeroCard
+          projectName={p.name}
+          ownerName={p.ownerName}
+          projectCode={p.code}
+          status={p.status}
+          startDate={p.startDate}
+          currency="ريال يمني"
+          total={money(
+            owner.displayBalance || 0,
+            'YER'
+          )}
+        />
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <FinanceCard
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      title="الصندوق"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  value={cashBox.displayBalance || 0}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              status={cashBox.status || '-'}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          color={cashBox.color || 'blue'}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
+        <div className="finance-grid">
+          <FinanceCard
+            title="حساب المالك"
+            value={
+              owner.displayBalance || 0
+            }
+            status={
+              owner.status || '-'
+            }
+            color={
+              owner.color || 'blue'
+            }
+          />
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              id="page-start"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        className="page-start-anchor"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                />
+          <FinanceCard
+            title="حساب المقاول"
+            value={
+              contractor.displayBalance || 0
+            }
+            status={
+              contractor.status || '-'
+            }
+            color={
+              contractor.color || 'blue'
+            }
+          />
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <Outlet
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  context={{
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              project: p,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          setProject: updateProject,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        );
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+          <FinanceCard
+            title="مقاولو الباطن"
+            value={
+              subcontractors.displayBalance || 0
+            }
+            status={
+              subcontractors.status || '-'
+            }
+            color={
+              subcontractors.color || 'blue'
+            }
+          />
+
+          <FinanceCard
+            title="الصندوق"
+            value={
+              cashBox.displayBalance || 0
+            }
+            status={
+              cashBox.status || '-'
+            }
+            color={
+              cashBox.color || 'blue'
+            }
+          />
+        </div>
+
+        <div
+          id="page-start"
+          className="page-start-anchor"
+        />
+
+        <Outlet
+          context={{
+            project: p,
+            setProject: updateProject,
+            refreshProject,
+          }}
+        />
+      </div>
+    </div>
+  );
+      }
