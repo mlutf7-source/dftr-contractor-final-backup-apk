@@ -14,8 +14,9 @@
         "@capacitor/cli": "^8.4.1",
         "@capacitor/core": "^8.4.1",
         "@capacitor/device": "^8.0.2",
-        "@capacitor/filesystem": "latest",
-        "@capacitor/share": "latest",
+        "@capacitor/filesystem": "^8.0.0",
+"@capacitor/share": "^8.0.0",
+      
         "html2pdf.js": "^0.10.3",
         "react": "^19.2.7",
         "react-dom": "^19.2.7",
