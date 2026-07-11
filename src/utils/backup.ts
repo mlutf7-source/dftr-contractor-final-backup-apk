@@ -8,9 +8,6 @@ import { Share } from '@capacitor/share';
 
 const BACKUP_PREFIX = 'dftr-';
 
-const APP_FOLDER = 'دفتر المقاول';
-const BACKUP_FOLDER = 'دفتر المقاول/النسخ الاحتياطية';
-
 const EXCLUDED_KEYS = [
   'dftr-license-state',
   'dftr-device-code',
@@ -45,28 +42,6 @@ const shouldBackupKey = (key: string) => {
   }
 
   return true;
-};
-
-const ensureAppFolders = async () => {
-  try {
-    await Filesystem.mkdir({
-      path: APP_FOLDER,
-      directory: Directory.Documents,
-      recursive: true,
-    });
-  } catch {
-    // المجلد قد يكون موجودًا مسبقًا
-  }
-
-  try {
-    await Filesystem.mkdir({
-      path: BACKUP_FOLDER,
-      directory: Directory.Documents,
-      recursive: true,
-    });
-  } catch {
-    // المجلد قد يكون موجودًا مسبقًا
-  }
 };
 
 export function createBackupFile() {
@@ -104,37 +79,33 @@ export async function downloadBackup() {
   const fileName =
     `dftr-backup-${getDateTimeName()}.json`;
 
-  const filePath =
-    `${BACKUP_FOLDER}/${fileName}`;
-
   try {
-    await ensureAppFolders();
-
     await Filesystem.writeFile({
-      path: filePath,
+      path: fileName,
       data: json,
-      directory: Directory.Documents,
+      directory: Directory.Cache,
       encoding: Encoding.UTF8,
-      recursive: true,
     });
 
     const fileUri =
       await Filesystem.getUri({
-        path: filePath,
-        directory: Directory.Documents,
+        path: fileName,
+        directory: Directory.Cache,
       });
 
     await Share.share({
       title: 'نسخة احتياطية - دفتر المقاول',
-      text:
-        'تم إنشاء نسخة احتياطية من بيانات تطبيق دفتر المقاول',
+      text: 'نسخة احتياطية من بيانات تطبيق دفتر المقاول',
       url: fileUri.uri,
-      dialogTitle:
-        'مشاركة أو حفظ النسخة الاحتياطية',
+      dialogTitle: 'مشاركة أو حفظ النسخة الاحتياطية',
     });
 
-    return filePath;
-  } catch {
+    return {
+      success: true,
+      shared: true,
+      fileName,
+    };
+  } catch (error) {
     const blob = new Blob([json], {
       type: 'application/json;charset=utf-8',
     });
@@ -152,7 +123,11 @@ export async function downloadBackup() {
 
     URL.revokeObjectURL(url);
 
-    return fileName;
+    return {
+      success: true,
+      shared: false,
+      fileName,
+    };
   }
 }
 
