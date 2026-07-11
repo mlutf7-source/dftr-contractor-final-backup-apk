@@ -1,110 +1,179 @@
+import {
+  Filesystem,
+  Directory,
+  Encoding,
+} from '@capacitor/filesystem';
+
+import { Share } from '@capacitor/share';
+
 const BACKUP_PREFIX = 'dftr-';
+
+const APP_FOLDER = 'دفتر المقاول';
+const BACKUP_FOLDER = 'دفتر المقاول/النسخ الاحتياطية';
 
 export type BackupFile = {
   app: string;
-    version: number;
-      createdAt: string;
-        data: Record<string, string>;
-        };
+  version: number;
+  createdAt: string;
+  data: Record<string, string>;
+};
 
-        const getTodayName = () => {
-          const d = new Date();
+const getDateTimeName = () => {
+  const d = new Date();
 
-            const yyyy = d.getFullYear();
-              const mm = String(d.getMonth() + 1).padStart(2, '0');
-                const dd = String(d.getDate()).padStart(2, '0');
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const hh = String(d.getHours()).padStart(2, '0');
+  const min = String(d.getMinutes()).padStart(2, '0');
 
-                  return `${yyyy}-${mm}-${dd}`;
-                  };
+  return `${yyyy}-${mm}-${dd}-${hh}-${min}`;
+};
 
-                  export function createBackupFile() {
-                    const data: Record<string, string> = {};
+const ensureAppFolders = async () => {
+  try {
+    await Filesystem.mkdir({
+      path: APP_FOLDER,
+      directory: Directory.Documents,
+      recursive: true,
+    });
+  } catch {
+    // المجلد قد يكون موجودًا مسبقًا
+  }
 
-                      for (let i = 0; i < localStorage.length; i++) {
-                          const key = localStorage.key(i);
+  try {
+    await Filesystem.mkdir({
+      path: BACKUP_FOLDER,
+      directory: Directory.Documents,
+      recursive: true,
+    });
+  } catch {
+    // المجلد قد يكون موجودًا مسبقًا
+  }
+};
 
-                              if (!key) continue;
+export function createBackupFile() {
+  const data: Record<string, string> = {};
 
-                                  if (key.startsWith(BACKUP_PREFIX)) {
-                                        const value = localStorage.getItem(key);
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
 
-                                              if (value !== null) {
-                                                      data[key] = value;
-                                                            }
-                                                                }
-                                                                  }
+    if (!key) continue;
 
-                                                                    const backup: BackupFile = {
-                                                                        app: 'دفتر المقاول',
-                                                                            version: 1,
-                                                                                createdAt: new Date().toISOString(),
-                                                                                    data,
-                                                                                      };
+    if (key.startsWith(BACKUP_PREFIX)) {
+      const value = localStorage.getItem(key);
 
-                                                                                        return backup;
-                                                                                        }
+      if (value !== null) {
+        data[key] = value;
+      }
+    }
+  }
 
-                                                                                        export function downloadBackup() {
-                                                                                          const backup = createBackupFile();
+  const backup: BackupFile = {
+    app: 'دفتر المقاول',
+    version: 1,
+    createdAt: new Date().toISOString(),
+    data,
+  };
 
-                                                                                            const json = JSON.stringify(backup, null, 2);
+  return backup;
+}
 
-                                                                                              const blob = new Blob([json], {
-                                                                                                  type: 'application/json;charset=utf-8',
-                                                                                                    });
+export async function downloadBackup() {
+  const backup = createBackupFile();
 
-                                                                                                      const url = URL.createObjectURL(blob);
+  const json = JSON.stringify(backup, null, 2);
 
-                                                                                                        const a = document.createElement('a');
+  const fileName =
+    `dftr-backup-${getDateTimeName()}.json`;
 
-                                                                                                          a.href = url;
-                                                                                                            a.download = `dftr-backup-${getTodayName()}.json`;
+  const filePath =
+    `${BACKUP_FOLDER}/${fileName}`;
 
-                                                                                                              document.body.appendChild(a);
+  try {
+    await ensureAppFolders();
 
-                                                                                                                a.click();
+    await Filesystem.writeFile({
+      path: filePath,
+      data: json,
+      directory: Directory.Documents,
+      encoding: Encoding.UTF8,
+      recursive: true,
+    });
 
-                                                                                                                  document.body.removeChild(a);
+    const fileUri = await Filesystem.getUri({
+      path: filePath,
+      directory: Directory.Documents,
+    });
 
-                                                                                                                    URL.revokeObjectURL(url);
-                                                                                                                    }
+    await Share.share({
+      title: 'نسخة احتياطية - دفتر المقاول',
+      text:
+        'تم إنشاء نسخة احتياطية من بيانات تطبيق دفتر المقاول',
+      url: fileUri.uri,
+      dialogTitle:
+        'مشاركة أو حفظ النسخة الاحتياطية',
+    });
 
-                                                                                                                    export async function restoreBackupFromFile(
-                                                                                                                      file: File
-                                                                                                                      ) {
-                                                                                                                        const text = await file.text();
+    return filePath;
+  } catch {
+    const blob = new Blob([json], {
+      type: 'application/json;charset=utf-8',
+    });
 
-                                                                                                                          let parsed: BackupFile;
+    const url = URL.createObjectURL(blob);
 
-                                                                                                                            try {
-                                                                                                                                parsed = JSON.parse(text);
-                                                                                                                                  } catch {
-                                                                                                                                      throw new Error(
-                                                                                                                                            'ملف النسخة الاحتياطية غير صالح'
-                                                                                                                                                );
-                                                                                                                                                  }
+    const a = document.createElement('a');
 
-                                                                                                                                                    if (
-                                                                                                                                                        !parsed ||
-                                                                                                                                                            parsed.app !== 'دفتر المقاول' ||
-                                                                                                                                                                !parsed.data ||
-                                                                                                                                                                    typeof parsed.data !== 'object'
-                                                                                                                                                                      ) {
-                                                                                                                                                                          throw new Error(
-                                                                                                                                                                                'هذا الملف ليس نسخة احتياطية صحيحة للتطبيق'
-                                                                                                                                                                                    );
-                                                                                                                                                                                      }
+    a.href = url;
+    a.download = fileName;
 
-                                                                                                                                                                                        Object.entries(parsed.data).forEach(
-                                                                                                                                                                                            ([key, value]) => {
-                                                                                                                                                                                                  if (
-                                                                                                                                                                                                          key.startsWith(BACKUP_PREFIX) &&
-                                                                                                                                                                                                                  typeof value === 'string'
-                                                                                                                                                                                                                        ) {
-                                                                                                                                                                                                                                localStorage.setItem(key, value);
-                                                                                                                                                                                                                                      }
-                                                                                                                                                                                                                                          }
-                                                                                                                                                                                                                                            );
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 
-                                                                                                                                                                                                                                              return true;
-                                                                                                                                                                                                                                              }
+    URL.revokeObjectURL(url);
+
+    return fileName;
+  }
+}
+
+export async function restoreBackupFromFile(
+  file: File
+) {
+  const text = await file.text();
+
+  let parsed: BackupFile;
+
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    throw new Error(
+      'ملف النسخة الاحتياطية غير صالح'
+    );
+  }
+
+  if (
+    !parsed ||
+    parsed.app !== 'دفتر المقاول' ||
+    !parsed.data ||
+    typeof parsed.data !== 'object'
+  ) {
+    throw new Error(
+      'هذا الملف ليس نسخة احتياطية صحيحة للتطبيق'
+    );
+  }
+
+  Object.entries(parsed.data).forEach(
+    ([key, value]) => {
+      if (
+        key.startsWith(BACKUP_PREFIX) &&
+        typeof value === 'string'
+      ) {
+        localStorage.setItem(key, value);
+      }
+    }
+  );
+
+  return true;
+}
