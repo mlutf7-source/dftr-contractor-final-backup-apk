@@ -1,0 +1,35 @@
+.project-page{min-height:100vh;background:#f6f8ff}
+.project-shell{max-width:430px;margin:auto;min-height:100vh}
+.top-tabs{position:sticky;top:0;z-index:50;display:flex;gap:10px;overflow-x:auto;padding:10px 14px;background:#fff;border-radius:0 0 24px 24px;box-shadow:0 12px 26px rgba(6,25,74,.10);scrollbar-width:none}
+.top-tabs::-webkit-scrollbar{display:none}
+.top-tab{min-width:82px;height:74px;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:#06194a}
+.top-tab span{font-size:26px}
+.top-tab small{font-size:12px;font-weight:900;white-space:nowrap}
+.top-tab.active{background:linear-gradient(135deg,#245bff,#6c4bff);color:#fff;box-shadow:0 10px 22px rgba(36,91,255,.28)}
+.project-body{padding:14px}
+.hero-card{background:linear-gradient(135deg,#074be8,#7b38e8);color:#fff;border-radius:24px;padding:18px;margin-bottom:14px;box-shadow:0 16px 30px rgba(54,79,230,.28)}
+.hero-top{display:flex;justify-content:space-between;align-items:center}
+.hero-status{background:rgba(255,255,255,.16);border-radius:12px;padding:7px 12px;font-weight:900}
+.status-dot{display:inline-block;width:8px;height:8px;background:#22d46b;border-radius:50%;margin-left:6px}
+.hero-icon{font-size:48px}
+.hero-card h2{text-align:center;font-size:24px;margin:16px 0 4px;color:#fff}
+.hero-card>small{display:block;text-align:center;color:#dce7ff}
+.hero-info{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;border-top:1px solid rgba(255,255,255,.2);padding-top:14px;margin-top:16px;text-align:center}
+.hero-info span{display:block;color:#dce7ff;font-size:11px}
+.hero-info strong{font-size:13px}
+.quick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.quick-action{background:#fff;border:1px solid #dfe7f5;border-radius:15px;padding:12px;text-align:center;font-weight:900;color:#06194a}
+.quick-icon{display:block;font-size:24px;margin-bottom:5px}
+.finance-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px}
+.finance-card{background:white;border-radius:22px;text-align:center;padding:14px 8px;box-shadow:0 12px 26px rgba(6,25,74,.08);border:1px solid #e8eef8}
+.finance-icon{font-size:28px}
+.finance-card h3{font-size:15px;margin:7px 0}
+.finance-card p{margin:6px 0 2px;color:#1b2d62;font-size:13px}
+.finance-card strong{display:block;font-size:16px}
+.finance-card hr{border:0;border-top:1px solid #eef2fa;margin:10px}
+.pill-green,.pill-red{display:inline-block;margin-top:6px;padding:5px 18px;border-radius:20px;font-style:normal;font-weight:900}
+.pill-green{background:#e5f8ed;color:#0b9648}
+.pill-red{background:#ffe8e8;color:#e72727}
+.operation-row{display:grid;grid-template-columns:100px 1fr 24px;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid #edf2fa}
+.operation-row:last-child{border-bottom:0}
+.operation-row small{display:block;color:#6d7895;margin-top:4px}

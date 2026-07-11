@@ -1,0 +1,154 @@
+.home-page{
+    min-height:100vh;
+      background:#f6f8ff;
+      }
+
+      .home-container{
+        max-width:430px;
+          margin:auto;
+            padding:14px;
+            }
+
+            .home-header{
+              display:flex;
+                justify-content:space-between;
+                  align-items:center;
+                    margin-bottom:16px;
+                    }
+
+                    .home-title h1{
+                      margin:0;
+                        font-size:24px;
+                          color:#102A43;
+                          }
+
+                          .home-title p{
+                            margin:4px 0 0;
+                              color:#6B7280;
+                                font-size:13px;
+                                }
+
+                                .home-actions{
+                                  display:flex;
+                                    gap:8px;
+                                    }
+
+                                    .home-top-actions{
+                                      display:grid;
+                                        grid-template-columns:1fr 1fr;
+                                          gap:8px;
+                                            margin-bottom:10px;
+                                            }
+
+                                            .home-action-link{
+                                              display:flex;
+                                                align-items:center;
+                                                  justify-content:center;
+                                                    gap:6px;
+                                                      padding:10px 8px;
+                                                        border-radius:14px;
+                                                          background:#fff;
+                                                            border:1px solid #e5ebf5;
+                                                              color:#245BFF;
+                                                                font-size:13px;
+                                                                  font-weight:800;
+                                                                    box-shadow:0 6px 16px rgba(0,0,0,.06);
+                                                                      text-align:center;
+                                                                      }
+
+                                                                      .danger-link{
+                                                                        color:#e53935;
+                                                                        }
+
+                                                                        .trash-link{
+                                                                          display:inline-flex;
+                                                                            align-items:center;
+                                                                              justify-content:center;
+                                                                                gap:6px;
+                                                                                  padding:10px 14px;
+                                                                                    border-radius:14px;
+                                                                                      background:#fff;
+                                                                                        border:1px solid #e5ebf5;
+                                                                                          color:#e53935;
+                                                                                            font-size:14px;
+                                                                                              font-weight:800;
+                                                                                                box-shadow:0 6px 16px rgba(0,0,0,.06);
+                                                                                                }
+
+                                                                                                .circle-btn{
+                                                                                                  width:46px;
+                                                                                                    height:46px;
+                                                                                                      border-radius:16px;
+                                                                                                        border:none;
+                                                                                                          background:#fff;
+                                                                                                            box-shadow:0 8px 22px rgba(0,0,0,.08);
+                                                                                                              font-size:20px;
+                                                                                                              }
+
+                                                                                                              .project-grid{
+                                                                                                                display:grid;
+                                                                                                                  gap:14px;
+                                                                                                                  }
+
+                                                                                                                  .project-card{
+                                                                                                                    background:rgba(255,255,255,.78);
+                                                                                                                      border:1px solid rgba(36,91,255,.14);
+                                                                                                                        border-radius:20px;
+                                                                                                                          padding:16px;
+                                                                                                                            box-shadow:0 8px 22px rgba(36,91,255,.08);
+                                                                                                                            }
+
+                                                                                                                            .project-card + .project-card{
+                                                                                                                              margin-top:0;
+                                                                                                                              }
+
+                                                                                                                              .project-card-header{
+                                                                                                                                border-radius:16px;
+                                                                                                                                  padding:2px;
+                                                                                                                                  }
+
+                                                                                                                                  .project-card-actions{
+                                                                                                                                    display:grid;
+                                                                                                                                      grid-template-columns:1fr 1fr;
+                                                                                                                                        gap:8px;
+                                                                                                                                          margin-top:16px;
+                                                                                                                                          }
+
+                                                                                                                                          .project-card-actions .danger{
+                                                                                                                                            grid-column:1 / -1;
+                                                                                                                                            }
+
+                                                                                                                                            .fab{
+                                                                                                                                              position:fixed;
+                                                                                                                                                bottom:22px;
+                                                                                                                                                  left:50%;
+                                                                                                                                                    transform:translateX(-50%);
+                                                                                                                                                      width:64px;
+                                                                                                                                                        height:64px;
+                                                                                                                                                          border-radius:50%;
+                                                                                                                                                            border:none;
+                                                                                                                                                              background:linear-gradient(135deg,#245BFF,#6C4BFF);
+                                                                                                                                                                color:#fff;
+                                                                                                                                                                  font-size:34px;
+                                                                                                                                                                    box-shadow:0 15px 30px rgba(36,91,255,.35);
+                                                                                                                                                                      z-index:100;
+                                                                                                                                                                      }
+
+                                                                                                                                                                      .search-box{
+                                                                                                                                                                        margin-bottom:14px;
+                                                                                                                                                                        }
+
+                                                                                                                                                                        .search-box input{
+                                                                                                                                                                          width:100%;
+                                                                                                                                                                            padding:14px;
+                                                                                                                                                                              border-radius:16px;
+                                                                                                                                                                                border:1px solid #DFE7F5;
+                                                                                                                                                                                  background:#fff;
+                                                                                                                                                                                    font-size:15px;
+                                                                                                                                                                                    }
+
+                                                                                                                                                                                    .empty-home{
+                                                                                                                                                                                      text-align:center;
+                                                                                                                                                                                        color:#6B7280;
+                                                                                                                                                                                          padding:40px 20px;
+                                                                                                                                                                                          }

@@ -1,0 +1,118 @@
+import { useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
+
+import type {
+  CurrencyCode,
+    Project,
+    } from '../../models/types';
+
+    import {
+      getProjectSummary,
+      } from '../../database/calculations';
+
+      import { fromYER, money } from '../../utils/currency';
+
+      import CurrencySelector from '../../components/common/CurrencySelector';
+      import AppCard from '../../components/cards/AppCard';
+      import SummaryCards from '../../components/cards/SummaryCards';
+
+      type Ctx = {
+        project: Project;
+        };
+
+        export default function Reports() {
+
+          const { project } =
+              useOutletContext<Ctx>();
+
+                const [currency, setCurrency] =
+                    useState<CurrencyCode>('YER');
+
+                      const [rate, setRate] =
+                          useState(1);
+
+                            const summary =
+                                getProjectSummary(project);
+
+                                  const convert = (v: number) =>
+                                      fromYER(
+                                            v,
+                                                  currency,
+                                                        {
+                                                                SAR:
+                                                                          currency === 'SAR'
+                                                                                      ? rate
+                                                                                                  : project.exchangeRates.SAR,
+
+                                                                                                          USD:
+                                                                                                                    currency === 'USD'
+                                                                                                                                ? rate
+                                                                                                                                            : project.exchangeRates.USD,
+                                                                                                                                                  }
+                                                                                                                                                      );
+
+                                                                                                                                                        return (
+
+                                                                                                                                                            <div>
+
+                                                                                                                                                                  <h2>
+                                                                                                                                                                          📈 التقارير
+                                                                                                                                                                                </h2>
+
+                                                                                                                                                                                      <CurrencySelector
+                                                                                                                                                                                              currency={currency}
+                                                                                                                                                                                                      rates={project.exchangeRates}
+                                                                                                                                                                                                              rate={rate}
+                                                                                                                                                                                                                      onCurrency={setCurrency}
+                                                                                                                                                                                                                              onRate={setRate}
+                                                                                                                                                                                                                                    />
+
+                                                                                                                                                                                                                                          <SummaryCards
+                                                                                                                                                                                                                                                  due={convert(summary.owner.due)}
+                                                                                                                                                                                                                                                          paid={convert(summary.cash.expense)}
+                                                                                                                                                                                                                                                                  balance={convert(summary.cash.balance)}
+                                                                                                                                                                                                                                                                          currency={currency}
+                                                                                                                                                                                                                                                                                  dueTitle="إجمالي الإيرادات"
+                                                                                                                                                                                                                                                                                          paidTitle="إجمالي المصروفات"
+                                                                                                                                                                                                                                                                                                  balanceTitle="صافي المشروع"
+                                                                                                                                                                                                                                                                                                        />
+
+                                                                                                                                                                                                                                                                                                              <AppCard
+                                                                                                                                                                                                                                                                                                                      title="ملخص الحسابات"
+                                                                                                                                                                                                                                                                                                                            ><div className="grid">
+
+                                                                                                                                                                                                                                                                                                                                        <div className="card">
+                                                                                                                                                                                                                                                                                                                                                    <h3>👤 حساب المالك</h3>
+                                                                                                                                                                                                                                                                                                                                                                <p>الذي عليه: {money(convert(summary.owner.due), currency)}</p>
+                                                                                                                                                                                                                                                                                                                                                                            <p>الذي له: {money(convert(summary.owner.paid), currency)}</p>
+                                                                                                                                                                                                                                                                                                                                                                                        <p>الرصيد: {money(convert(summary.owner.balance), currency)}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                  </div>
+
+                                                                                                                                                                                                                                                                                                                                                                                                            <div className="card">
+                                                                                                                                                                                                                                                                                                                                                                                                                        <h3>👷 حساب المقاول</h3>
+                                                                                                                                                                                                                                                                                                                                                                                                                                    <p>له: {money(convert(summary.contractor.due), currency)}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                <p>عليه: {money(convert(summary.contractor.paid), currency)}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            <p>الرصيد: {money(convert(summary.contractor.balance), currency)}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </div>
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div className="card">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <h3>🏗️ مقاولو الباطن</h3>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <p>لهم: {money(convert(summary.subcontractors.due), currency)}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <p>عليهم: {money(convert(summary.subcontractors.paid), currency)}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <p>الرصيد: {money(convert(summary.subcontractors.balance), currency)}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </div>
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div className="card">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <h3>💰 الصندوق</h3>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <p>الوارد: {money(convert(summary.cash.income), currency)}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <p>المنصرف: {money(convert(summary.cash.expense), currency)}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <p>الرصيد: {money(convert(summary.cash.balance), currency)}</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </div>
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </div>
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </AppCard>
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  );
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }

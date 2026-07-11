@@ -1,0 +1,780 @@
+:root{
+    --bg:#f6f8ff;
+      --card:#ffffff;
+        --text:#102A43;
+          --muted:#6B7280;
+            --border:#DFE7F5;
+              --blue:#245BFF;
+                --blue-soft:#eef4ff;
+                  --red:#e53935;
+                    --green:#1e9e5a;
+                      --shadow:0 10px 28px rgba(36,91,255,.10);
+                      }
+html,
+body{
+  overflow-x:hidden;
+  }
+
+  #root{
+    overflow-x:hidden;
+    }
+                      *{
+                        box-sizing:border-box;
+                        }
+
+                        html,
+                        body,
+                        #root{
+                          min-height:100%;
+                          }
+
+                          body{
+                            margin:0;
+                              direction:rtl;
+                                font-family:Cairo,Tahoma,Arial,sans-serif;
+                                  background:#eef3ff;
+                                    color:var(--text);
+                                      display:flex;
+                                        justify-content:center;
+                                        }
+
+                                        #root{
+                                          width:100%;
+                                            max-width:430px;
+                                              min-height:100vh;
+                                                margin:0 auto;
+                                                  background:var(--bg);
+                                                  }
+
+                                                  body[data-theme="dark"]{
+                                                    --bg:#0f172a;
+                                                      --card:#111827;
+                                                        --text:#f8fafc;
+                                                          --muted:#cbd5e1;
+                                                            --border:#334155;
+                                                              --blue-soft:#172554;
+                                                                background:#020617;
+                                                                  color:var(--text);
+                                                                  }
+
+                                                                  a{
+                                                                    text-decoration:none;
+                                                                      color:inherit;
+                                                                      }
+
+                                                                      button,
+                                                                      input,
+                                                                      select,
+                                                                      textarea{
+                                                                        font-family:inherit;
+                                                                        }
+
+                                                                        button{
+                                                                          cursor:pointer;
+                                                                          }
+
+                                                                          h1,
+                                                                          h2,
+                                                                          h3,
+                                                                          p{
+                                                                            margin-top:0;
+                                                                            }
+
+                                                                            .project-page,
+                                                                            .project-container,
+                                                                            .home-page,
+                                                                            .home-container{
+                                                                              width:100%;
+                                                                                max-width:430px;
+                                                                                  margin:0 auto;
+                                                                                  }
+
+                                                                                  .project-page,
+                                                                                  .project-container{
+                                                                                    padding:12px;
+                                                                                    }
+
+                                                                                    .card,
+                                                                                    .app-card{
+                                                                                      background:var(--card);
+                                                                                        border:1px solid var(--border);
+                                                                                          border-radius:20px;
+                                                                                            padding:16px;
+                                                                                              margin-bottom:14px;
+                                                                                                box-shadow:var(--shadow);
+                                                                                                }
+
+                                                                                                .app-card-title,
+                                                                                                .section-title-box{
+                                                                                                  font-size:16px;
+                                                                                                    font-weight:900;
+                                                                                                      margin-bottom:12px;
+                                                                                                        color:var(--text);
+                                                                                                        }
+
+                                                                                                        .card > button,
+                                                                                                        .app-card > button{
+                                                                                                          all:unset;
+                                                                                                            width:100%;
+                                                                                                              box-sizing:border-box;
+                                                                                                                display:flex;
+                                                                                                                  align-items:center;
+                                                                                                                    justify-content:space-between;
+                                                                                                                      cursor:pointer;
+                                                                                                                        font-size:16px;
+                                                                                                                          font-weight:900;
+                                                                                                                            color:var(--text);
+                                                                                                                            }
+
+                                                                                                                            .field{
+                                                                                                                              display:block;
+                                                                                                                                margin-bottom:12px;
+                                                                                                                                }
+
+                                                                                                                                .field span{
+                                                                                                                                  display:block;
+                                                                                                                                    margin-bottom:6px;
+                                                                                                                                      font-size:13px;
+                                                                                                                                        font-weight:800;
+                                                                                                                                          color:var(--text);
+                                                                                                                                          }
+
+                                                                                                                                          .field input,
+                                                                                                                                          .field select,
+                                                                                                                                          .field textarea,
+                                                                                                                                          input,
+                                                                                                                                          select,
+                                                                                                                                          textarea{
+                                                                                                                                            width:100%;
+                                                                                                                                              border:1px solid var(--border);
+                                                                                                                                                background:var(--card);
+                                                                                                                                                  color:var(--text);
+                                                                                                                                                    border-radius:14px;
+                                                                                                                                                      padding:12px;
+                                                                                                                                                        font-size:15px;
+                                                                                                                                                          outline:none;
+                                                                                                                                                          }
+
+                                                                                                                                                          textarea{
+                                                                                                                                                            min-height:90px;
+                                                                                                                                                              resize:vertical;
+                                                                                                                                                              }
+
+                                                                                                                                                              .field input:focus,
+                                                                                                                                                              .field select:focus,
+                                                                                                                                                              .field textarea:focus,
+                                                                                                                                                              input:focus,
+                                                                                                                                                              select:focus,
+                                                                                                                                                              textarea:focus{
+                                                                                                                                                                border-color:var(--blue);
+                                                                                                                                                                  box-shadow:0 0 0 3px rgba(36,91,255,.10);
+                                                                                                                                                                  }
+
+                                                                                                                                                                  .row{
+                                                                                                                                                                    display:flex;
+                                                                                                                                                                      gap:8px;
+                                                                                                                                                                        flex-wrap:wrap;
+                                                                                                                                                                          align-items:center;
+                                                                                                                                                                          }
+
+                                                                                                                                                                          .row .btn{
+                                                                                                                                                                            flex:1;
+                                                                                                                                                                            }
+
+                                                                                                                                                                            .btn{
+                                                                                                                                                                              border:none;
+                                                                                                                                                                                border-radius:14px;
+                                                                                                                                                                                  padding:11px 14px;
+                                                                                                                                                                                    font-size:14px;
+                                                                                                                                                                                      font-weight:900;
+                                                                                                                                                                                        display:inline-flex;
+                                                                                                                                                                                          align-items:center;
+                                                                                                                                                                                            justify-content:center;
+                                                                                                                                                                                              gap:6px;
+                                                                                                                                                                                                text-align:center;
+                                                                                                                                                                                                }
+
+                                                                                                                                                                                                .btn.primary{
+                                                                                                                                                                                                  background:linear-gradient(135deg,#245BFF,#6C4BFF);
+                                                                                                                                                                                                    color:#fff;
+                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                    .btn.gray{
+                                                                                                                                                                                                      background:#eef2f7;
+                                                                                                                                                                                                        color:#102A43;
+                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                        .btn.danger{
+                                                                                                                                                                                                          background:#ffecec;
+                                                                                                                                                                                                            color:var(--red);
+                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                            .btn.success{
+                                                                                                                                                                                                              background:#e9fff2;
+                                                                                                                                                                                                                color:var(--green);
+                                                                                                                                                                                                                }
+
+                                                                                                                                                                                                                .money-row{
+                                                                                                                                                                                                                  display:grid;
+                                                                                                                                                                                                                    grid-template-columns:2fr 1fr;
+                                                                                                                                                                                                                      gap:8px;
+                                                                                                                                                                                                                        align-items:end;
+                                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                                        .form-row-2{
+                                                                                                                                                                                                                          display:grid;
+                                                                                                                                                                                                                            grid-template-columns:1fr 1fr;
+                                                                                                                                                                                                                              gap:8px;
+                                                                                                                                                                                                                              }
+
+                                                                                                                                                                                                                              .summary-grid{
+                                                                                                                                                                                                                                display:grid;
+                                                                                                                                                                                                                                  grid-template-columns:1fr 1fr;
+                                                                                                                                                                                                                                    gap:10px;
+                                                                                                                                                                                                                                      margin-bottom:14px;
+                                                                                                                                                                                                                                      }
+
+                                                                                                                                                                                                                                      .summary-card{
+                                                                                                                                                                                                                                        background:var(--card);
+                                                                                                                                                                                                                                          border:1px solid var(--border);
+                                                                                                                                                                                                                                            border-radius:18px;
+                                                                                                                                                                                                                                              padding:12px;
+                                                                                                                                                                                                                                                box-shadow:var(--shadow);
+                                                                                                                                                                                                                                                }
+
+                                                                                                                                                                                                                                                .summary-card span{
+                                                                                                                                                                                                                                                  display:block;
+                                                                                                                                                                                                                                                    color:var(--muted);
+                                                                                                                                                                                                                                                      font-size:12px;
+                                                                                                                                                                                                                                                        font-weight:800;
+                                                                                                                                                                                                                                                          margin-bottom:5px;
+                                                                                                                                                                                                                                                          }
+
+                                                                                                                                                                                                                                                          .summary-card strong{
+                                                                                                                                                                                                                                                            font-size:16px;
+                                                                                                                                                                                                                                                              font-weight:900;
+                                                                                                                                                                                                                                                              }
+
+                                                                                                                                                                                                                                                              .blue{
+                                                                                                                                                                                                                                                                color:var(--blue)!important;
+                                                                                                                                                                                                                                                                }
+
+                                                                                                                                                                                                                                                                .red{
+                                                                                                                                                                                                                                                                  color:var(--red)!important;
+                                                                                                                                                                                                                                                                  }
+
+                                                                                                                                                                                                                                                                  .green{
+                                                                                                                                                                                                                                                                    color:var(--green)!important;
+                                                                                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                                                                                    .pill-red,
+                                                                                                                                                                                                                                                                    .pill-green{
+                                                                                                                                                                                                                                                                      display:inline-flex;
+                                                                                                                                                                                                                                                                        align-items:center;
+                                                                                                                                                                                                                                                                          justify-content:center;
+                                                                                                                                                                                                                                                                            padding:4px 9px;
+                                                                                                                                                                                                                                                                              border-radius:999px;
+                                                                                                                                                                                                                                                                                font-size:12px;
+                                                                                                                                                                                                                                                                                  font-weight:900;
+                                                                                                                                                                                                                                                                                  }
+
+                                                                                                                                                                                                                                                                                  .pill-red{
+                                                                                                                                                                                                                                                                                    background:#ffecec;
+                                                                                                                                                                                                                                                                                      color:var(--red);
+                                                                                                                                                                                                                                                                                      }
+
+                                                                                                                                                                                                                                                                                      .pill-green{
+                                                                                                                                                                                                                                                                                        background:#e9fff2;
+                                                                                                                                                                                                                                                                                          color:var(--green);
+                                                                                                                                                                                                                                                                                          }
+
+/* شريط التبويبات */
+.top-tabs{
+  position:sticky;
+    top:0;
+      z-index:70;
+        display:grid;
+          grid-template-columns:repeat(4,1fr);
+            gap:7px;
+              background:var(--bg);
+                padding:8px 0;
+                  margin-bottom:12px;
+                  }
+
+                  .top-tabs a{
+                    background:var(--card);
+                      border:1px solid var(--border);
+                        border-radius:14px;
+                          padding:8px 4px;
+                            font-size:12px;
+                              font-weight:900;
+                                color:var(--text);
+                                  box-shadow:0 6px 16px rgba(0,0,0,.05);
+                                    display:flex;
+                                      flex-direction:column;
+                                        align-items:center;
+                                          justify-content:center;
+                                            gap:3px;
+                                              text-align:center;
+                                                min-height:58px;
+                                                }
+
+                                                .top-tabs a span{
+                                                  font-size:22px;
+                                                    line-height:1;
+                                                    }
+
+                                                    .top-tabs a b{
+                                                      font-size:12px;
+                                                        line-height:1.2;
+                                                        }
+
+                                                        .top-tabs a.active{
+                                                          background:linear-gradient(135deg,#245BFF,#6C4BFF);
+                                                            color:#fff;
+                                                              border-color:transparent;
+                                                              }
+
+                                                              .top-tabs .top-tab-back{
+                                                                background:#fff;
+                                                                  color:var(--blue);
+                                                                    border:1px solid var(--border);
+                                                                    }
+
+                                                                    .top-tabs .top-tab-back span{
+                                                                      font-size:24px;
+                                                                      }
+
+
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                .page-start-anchor{
+                                                                                                                                                                                                                                                                                                                                                                                                  scroll-margin-top:220px;
+                                                                                                                                                                                                                                                                                                                                                                                                  }
+
+                                                                                                                                                                                                                                                                                                                                                                                                  /* رأس المشروع */
+                                                                                                                                                                                                                                                                                                                                                                                                  .hero-card{
+                                                                                                                                                                                                                                                                                                                                                                                                    background:linear-gradient(135deg,#245BFF,#6C4BFF);
+                                                                                                                                                                                                                                                                                                                                                                                                      color:#fff;
+                                                                                                                                                                                                                                                                                                                                                                                                        border-radius:24px;
+                                                                                                                                                                                                                                                                                                                                                                                                          padding:18px;
+                                                                                                                                                                                                                                                                                                                                                                                                            margin-bottom:14px;
+                                                                                                                                                                                                                                                                                                                                                                                                              box-shadow:0 16px 36px rgba(36,91,255,.25);
+                                                                                                                                                                                                                                                                                                                                                                                                              }
+
+                                                                                                                                                                                                                                                                                                                                                                                                              .hero-card h2{
+                                                                                                                                                                                                                                                                                                                                                                                                                margin:0 0 6px;
+                                                                                                                                                                                                                                                                                                                                                                                                                  font-size:20px;
+                                                                                                                                                                                                                                                                                                                                                                                                                  }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                  .hero-owner{
+                                                                                                                                                                                                                                                                                                                                                                                                                    font-size:15px;
+                                                                                                                                                                                                                                                                                                                                                                                                                      font-weight:800;
+                                                                                                                                                                                                                                                                                                                                                                                                                        margin-bottom:4px;
+                                                                                                                                                                                                                                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                        .hero-card small{
+                                                                                                                                                                                                                                                                                                                                                                                                                          display:block;
+                                                                                                                                                                                                                                                                                                                                                                                                                            opacity:.9;
+                                                                                                                                                                                                                                                                                                                                                                                                                              margin-bottom:10px;
+                                                                                                                                                                                                                                                                                                                                                                                                                              }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                              .hero-meta{
+                                                                                                                                                                                                                                                                                                                                                                                                                                display:flex;
+                                                                                                                                                                                                                                                                                                                                                                                                                                  gap:8px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                    flex-wrap:wrap;
+                                                                                                                                                                                                                                                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                    .hero-meta span{
+                                                                                                                                                                                                                                                                                                                                                                                                                                      background:rgba(255,255,255,.16);
+                                                                                                                                                                                                                                                                                                                                                                                                                                        border-radius:999px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                          padding:5px 10px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                            font-size:12px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                              font-weight:800;
+                                                                                                                                                                                                                                                                                                                                                                                                                                              }
+.finance-grid{
+    display:grid;
+      grid-template-columns:1fr 1fr;
+        gap:10px;
+          margin-bottom:14px;
+          }
+
+          .finance-card{
+            background:var(--card);
+              border:1px solid var(--border);
+                border-radius:18px;
+                  padding:12px;
+                    box-shadow:var(--shadow);
+                    }
+
+                    .finance-card span{
+                      display:block;
+                        font-size:12px;
+                          font-weight:800;
+                            color:var(--muted);
+                              margin-bottom:5px;
+                              }
+
+                              .finance-card strong{
+                                display:block;
+                                  font-size:15px;
+                                    font-weight:900;
+                                      margin-bottom:6px;
+                                      }
+
+
+
+.table-wrap{
+    width:100%;
+      max-width:100%;
+        overflow-x:hidden;
+          border-radius:16px;
+          }
+
+          .account-table{
+            width:100%;
+              max-width:100%;
+                min-width:0;
+                  table-layout:fixed;
+                    border-collapse:collapse;
+                      background:var(--card);
+                      }
+
+                      .account-table th,
+                      .account-table td{
+                        border:1px solid var(--border);
+                          padding:7px 4px;
+                            text-align:center;
+                              font-size:11px;
+                                vertical-align:middle;
+                                  word-break:break-word;
+                                    overflow-wrap:anywhere;
+                                    }
+
+                                                                .account-table th{
+                                                                  background:var(--blue-soft);
+                                                                    color:var(--text);
+                                                                      font-weight:900;
+                                                                      }
+
+                                                                      .section-row td{
+                                                                        background:#eef5ff;
+                                                                          color:#0B3BB5;
+                                                                            font-weight:900;
+                                                                              text-align:center;
+                                                                              }
+
+                                                                              .total-row td{
+                                                                                background:#f8fafc;
+                                                                                  font-weight:900;
+                                                                                  }
+
+                                                                                  .balance-row td{
+                                                                                    background:#eef8ff;
+                                                                                      font-weight:900;
+                                                                                      }
+
+                                                                                      .note{
+                                                                                        display:block;
+                                                                                          margin-top:4px;
+                                                                                            font-size:10px;
+                                                                                              color:var(--muted);
+                                                                                                line-height:1.4;
+                                                                                                }
+
+                                                                                                .report-header{
+                                                                                                  margin-bottom:14px;
+                                                                                                  }
+
+                                                                                                  .report-cliche{
+                                                                                                    display:flex;
+                                                                                                      align-items:center;
+                                                                                                        justify-content:center;
+                                                                                                          gap:14px;
+                                                                                                            text-align:center;
+                                                                                                              margin-bottom:12px;
+                                                                                                              }
+
+                                                                                                              .report-logo img{
+                                                                                                                width:70px;
+                                                                                                                  height:70px;
+                                                                                                                    object-fit:contain;
+                                                                                                                    }
+
+                                                                                                                    .report-cliche-info h2,
+                                                                                                                    .report-cliche-info h3,
+                                                                                                                    .report-cliche-info p{
+                                                                                                                      margin:3px 0;
+                                                                                                                      }
+
+                                                                                                                      .report-title{
+                                                                                                                        text-align:center;
+                                                                                                                          margin:10px 0;
+                                                                                                                          }
+
+                                                                                                                          .print-btn{
+                                                                                                                            margin-top:14px;
+                                                                                                                              width:100%;
+                                                                                                                              }
+
+                                                                                                                              .empty-state{
+                                                                                                                                padding:24px;
+                                                                                                                                  text-align:center;
+                                                                                                                                    color:var(--muted);
+                                                                                                                                      font-weight:800;
+                                                                                                                                      }
+
+                                                                                                                                      .grid{
+                                                                                                                                        display:grid;
+                                                                                                                                          gap:12px;
+                                                                                                                                          }
+
+                                                                                                                                          .quick-grid{
+                                                                                                                                            display:grid;
+                                                                                                                                              grid-template-columns:1fr 1fr;
+                                                                                                                                                gap:10px;
+                                                                                                                                                }
+
+                                                                                                                                                .cliche-logo-preview{
+                                                                                                                                                  width:100px;
+                                                                                                                                                    height:100px;
+                                                                                                                                                      border-radius:18px;
+                                                                                                                                                        border:1px solid var(--border);
+                                                                                                                                                          background:#fff;
+                                                                                                                                                            object-fit:contain;
+                                                                                                                                                              display:block;
+                                                                                                                                                                margin:8px auto 12px;
+                                                                                                                                                                }
+
+                                                                                                                                                                /* قفل التطبيق */
+                                                                                                                                                                .lock-page{
+                                                                                                                                                                  min-height:100vh;
+                                                                                                                                                                    display:flex;
+                                                                                                                                                                      align-items:center;
+                                                                                                                                                                        justify-content:center;
+                                                                                                                                                                          padding:20px;
+                                                                                                                                                                            background:linear-gradient(135deg,#eef4ff,#ffffff);
+                                                                                                                                                                            }
+
+                                                                                                                                                                            .lock-card{
+                                                                                                                                                                              width:100%;
+                                                                                                                                                                                max-width:360px;
+                                                                                                                                                                                  background:#fff;
+                                                                                                                                                                                    border-radius:24px;
+                                                                                                                                                                                      padding:24px;
+                                                                                                                                                                                        box-shadow:0 18px 40px rgba(36,91,255,.16);
+                                                                                                                                                                                          text-align:center;
+                                                                                                                                                                                          }
+
+                                                                                                                                                                                          .lock-card h2{
+                                                                                                                                                                                            margin:0 0 8px;
+                                                                                                                                                                                              color:#102A43;
+                                                                                                                                                                                              }
+
+                                                                                                                                                                                              .lock-card p{
+                                                                                                                                                                                                margin:0 0 16px;
+                                                                                                                                                                                                  color:#6B7280;
+                                                                                                                                                                                                    font-size:14px;
+                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                    .lock-card input{
+                                                                                                                                                                                                      width:100%;
+                                                                                                                                                                                                        padding:14px;
+                                                                                                                                                                                                          border-radius:16px;
+                                                                                                                                                                                                            border:1px solid #DFE7F5;
+                                                                                                                                                                                                              margin-bottom:14px;
+                                                                                                                                                                                                                text-align:center;
+                                                                                                                                                                                                                  font-size:18px;
+                                                                                                                                                                                                                    outline:none;
+                                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                                    .lock-card input:focus{
+                                                                                                                                                                                                                      border-color:#245BFF;
+                                                                                                                                                                                                                        box-shadow:0 0 0 3px rgba(36,91,255,.10);
+                                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                                        @media(max-width:420px){
+                                                                                                                                                                                                                          .summary-grid,
+                                                                                                                                                                                                                            .quick-grid,
+                                                                                                                                                                                                                              .finance-grid{
+                                                                                                                                                                                                                                  grid-template-columns:1fr;
+                                                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                                                      .project-container,
+                                                                                                                                                                                                                                        .project-page{
+                                                                                                                                                                                                                                            padding:10px;
+                                                                                                                                                                                                                                              }
+
+                                                                                                                                                                                                                                                .row .btn{
+                                                                                                                                                                                                                                                    min-width:120px;
+                                                                                                                                                                                                                                                      }
+                                                                                                                                                                                                                                                      }
+
+                                                                                                                                                                                                                                                      @media print{
+                                                                                                                                                                                                                                                        body{
+                                                                                                                                                                                                                                                            background:#fff!important;
+                                                                                                                                                                                                                                                                display:block!important;
+                                                                                                                                                                                                                                                                  }
+
+                                                                                                                                                                                                                                                                    #root{
+                                                                                                                                                                                                                                                                        max-width:none!important;
+                                                                                                                                                                                                                                                                            width:100%!important;
+                                                                                                                                                                                                                                                                                background:#fff!important;
+                                                                                                                                                                                                                                                                                  }
+
+                                                                                                                                                                                                                                                                                    .no-print,
+                                                                                                                                                                                                                                                                                      button,
+                                                                                                                                                                                                                                                                                        .top-tabs,
+                                                                                                                                                                                                                                                                                          .project-back-wrap{
+                                                                                                                                                                                                                                                                                              display:none!important;
+                                                                                                                                                                                                                                                                                                }
+
+                                                                                                                                                                                                                                                                                                  .card,
+                                                                                                                                                                                                                                                                                                    .app-card{
+                                                                                                                                                                                                                                                                                                        box-shadow:none!important;
+                                                                                                                                                                                                                                                                                                            border:none!important;
+                                                                                                                                                                                                                                                                                                              }
+
+                                                                                                                                                                                                                                                                                                                .table-wrap{
+                                                                                                                                                                                                                                                                                                                    overflow:visible!important;
+                                                                                                                                                                                                                                                                                                                      }
+
+                                                                                                                                                                                                                                                                                                                        .account-table{
+                                                                                                                                                                                                                                                                                                                            min-width:0!important;
+                                                                                                                                                                                                                                                                                                                                width:100%!important;
+                                                                                                                                                                                                                                                                                                                                  }
+                                                                                                                                                                                                                                                                                                                                  }
+.activation-page{
+    min-height:100vh;
+      width:100%;
+        display:flex;
+          align-items:center;
+            justify-content:center;
+              padding:18px;
+                background:linear-gradient(180deg,#eef4ff,#f8fbff);
+                  direction:rtl;
+                  }
+
+                  .activation-card{
+                    width:100%;
+                      max-width:430px;
+                        background:#ffffff;
+                          border:1px solid #dfe7f5;
+                            border-radius:22px;
+                              padding:20px;
+                                box-shadow:0 14px 35px rgba(36,91,255,.12);
+                                  color:#102a43;
+                                  }
+
+                                  .activation-card h1{
+                                    margin:0 0 14px;
+                                      font-size:1.35rem;
+                                        text-align:center;
+                                          color:#003366;
+                                          }
+
+                                          .activation-note{
+                                            margin:0 0 14px;
+                                              line-height:1.8;
+                                                font-size:.9rem;
+                                                  color:#334155;
+                                                    text-align:center;
+                                                    }
+
+                                                    .activation-success{
+                                                      padding:12px;
+                                                        border-radius:14px;
+                                                          background:#eafaf1;
+                                                            color:#167a3b;
+                                                              font-weight:800;
+                                                                text-align:center;
+                                                                  margin-bottom:14px;
+                                                                  }
+
+                                                                  .activation-small{
+                                                                    margin:12px 0 0;
+                                                                      font-size:.78rem;
+                                                                        color:#64748b;
+                                                                          text-align:center;
+                                                                            line-height:1.7;
+                                                                            }
+
+                                                                            .activation-card .field{
+                                                                              display:block;
+                                                                                margin-bottom:12px;
+                                                                                }
+
+                                                                                .activation-card .field span{
+                                                                                  display:block;
+                                                                                    margin-bottom:6px;
+                                                                                      font-size:.82rem;
+                                                                                        font-weight:800;
+                                                                                          color:#003366;
+                                                                                          }
+
+                                                                                          .activation-card input,
+                                                                                          .activation-card textarea{
+                                                                                            width:100%;
+                                                                                              border:1px solid #dfe7f5;
+                                                                                                border-radius:14px;
+                                                                                                  padding:11px 12px;
+                                                                                                    font-family:inherit;
+                                                                                                      font-size:.95rem;
+                                                                                                        outline:none;
+                                                                                                          background:#f8fbff;
+                                                                                                            color:#102a43;
+                                                                                                            }
+
+                                                                                                            .activation-card textarea{
+                                                                                                              resize:none;
+                                                                                                                text-align:center;
+                                                                                                                  direction:ltr;
+                                                                                                                    font-weight:800;
+                                                                                                                      letter-spacing:1px;
+                                                                                                                      }
+
+                                                                                                                      .activation-card input:focus,
+                                                                                                                      .activation-card textarea:focus{
+                                                                                                                        border-color:#245bff;
+                                                                                                                          box-shadow:0 0 0 3px rgba(36,91,255,.12);
+                                                                                                                          }
+
+                                                                                                                          .activation-card .row{
+                                                                                                                            display:grid;
+                                                                                                                              grid-template-columns:1fr 1fr;
+                                                                                                                                gap:8px;
+                                                                                                                                  margin-bottom:12px;
+                                                                                                                                  }
+
+                                                                                                                                  .activation-card .btn.full{
+                                                                                                                                    width:100%;
+                                                                                                                                    }
+
+                                                                                                                                    body[data-theme="dark"] .activation-page{
+                                                                                                                                      background:#0f172a;
+                                                                                                                                      }
+
+                                                                                                                                      body[data-theme="dark"] .activation-card{
+                                                                                                                                        background:#111827;
+                                                                                                                                          border-color:#263244;
+                                                                                                                                            color:#f8fafc;
+                                                                                                                                            }
+
+                                                                                                                                            body[data-theme="dark"] .activation-card h1,
+                                                                                                                                            body[data-theme="dark"] .activation-card .field span{
+                                                                                                                                              color:#bfdbfe;
+                                                                                                                                              }
+
+                                                                                                                                              body[data-theme="dark"] .activation-note,
+                                                                                                                                              body[data-theme="dark"] .activation-small{
+                                                                                                                                                color:#cbd5e1;
+                                                                                                                                                }
+
+                                                                                                                                                body[data-theme="dark"] .activation-card input,
+                                                                                                                                                body[data-theme="dark"] .activation-card textarea{
+                                                                                                                                                  background:#0f172a;
+                                                                                                                                                    border-color:#334155;
+                                                                                                                                                      color:#f8fafc;
+                                                                                                                                                      }
