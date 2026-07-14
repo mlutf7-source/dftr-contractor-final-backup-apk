@@ -3,7 +3,7 @@ import {
   Outlet,
   useParams,
 } from 'react-router-dom';
-
+import MaterialPricesBanner from '../../components/cards/MaterialPricesBanner';
 import {
   useCallback,
   useEffect,
@@ -189,7 +189,9 @@ export default function ProjectLayout() {
     <div className="project-page">
       <div className="project-container">
         <TopTabs />
+<TopTabs />
 
+<MaterialPricesBanner project={p} />
         <HeroCard
           projectName={p.name}
           ownerName={p.ownerName}
