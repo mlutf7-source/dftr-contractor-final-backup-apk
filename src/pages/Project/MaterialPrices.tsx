@@ -13,6 +13,7 @@ import type {
 } from '../../models/types';
 
 import {
+  currencyName,
   formatPriceRange,
   loadMaterialPrices,
   smartSortPrices,
@@ -44,6 +45,9 @@ export default function MaterialPrices() {
     useState('الكل');
 
   const [category, setCategory] =
+    useState('الكل');
+
+  const [currency, setCurrency] =
     useState('الكل');
 
   const load = async () => {
@@ -101,6 +105,7 @@ export default function MaterialPrices() {
             item.category,
             item.city,
             item.sourceName,
+            item.currency,
           ]
             .join(' ')
             .toLowerCase()
@@ -114,10 +119,15 @@ export default function MaterialPrices() {
           category === 'الكل' ||
           item.category === category;
 
+        const matchCurrency =
+          currency === 'الكل' ||
+          item.currency === currency;
+
         return (
           matchSearch &&
           matchCity &&
-          matchCategory
+          matchCategory &&
+          matchCurrency
         );
       });
 
@@ -130,6 +140,7 @@ export default function MaterialPrices() {
     search,
     city,
     category,
+    currency,
     project.location,
   ]);
 
@@ -250,6 +261,29 @@ export default function MaterialPrices() {
             </select>
           </label>
         </div>
+
+        <label className="field">
+          <span>العملة</span>
+
+          <select
+            value={currency}
+            onChange={(e) =>
+              setCurrency(e.target.value)
+            }
+          >
+            <option value="الكل">
+              الكل
+            </option>
+
+            <option value="YER">
+              {currencyName('YER')}
+            </option>
+
+            <option value="SAR">
+              {currencyName('SAR')}
+            </option>
+          </select>
+        </label>
       </div>
 
       {!filtered.length && (
@@ -289,6 +323,11 @@ export default function MaterialPrices() {
             </p>
 
             <p>
+              <b>العملة:</b>{' '}
+              {currencyName(item.currency)}
+            </p>
+
+            <p>
               <b>المصدر:</b>{' '}
               {item.sourceName}
             </p>
@@ -318,4 +357,4 @@ export default function MaterialPrices() {
       </div>
     </div>
   );
-      }
+    }
