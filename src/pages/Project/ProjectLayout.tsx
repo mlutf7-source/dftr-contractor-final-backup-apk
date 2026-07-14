@@ -201,19 +201,28 @@ export default function ProjectLayout() {
         <div
           className="no-print"
           style={{
-            position: 'sticky',
+            position: 'fixed',
             top: 0,
-            zIndex: 200,
+            left: 0,
+            right: 0,
+            zIndex: 9999,
             background: '#f3f6ff',
-            paddingTop: 6,
-            paddingBottom: 8,
-            marginBottom: 12,
+            padding: '6px 10px 8px',
+            boxShadow:
+              '0 8px 18px rgba(15, 23, 42, .12)',
           }}
         >
           <TopTabs />
 
           <MaterialPricesBanner project={p} />
         </div>
+
+        <div
+          className="no-print"
+          style={{
+            height: 170,
+          }}
+        />
 
         {!isMaterialPricesPage && (
           <>
@@ -289,6 +298,9 @@ export default function ProjectLayout() {
         <div
           id="page-start"
           className="page-start-anchor"
+          style={{
+            scrollMarginTop: 175,
+          }}
         />
 
         <Outlet
