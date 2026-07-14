@@ -375,13 +375,15 @@ export default function ProjectLayout() {
           }}
         />
 
-        <Outlet
-          context={{
-            project: p,
-            setProject: updateProject,
-            refreshProject,
-          }}
-        />
+        {!showProjectSummary && (
+  <Outlet
+    context={{
+      project: p,
+      setProject: updateProject,
+      refreshProject,
+    }}
+  />
+)}
       </div>
     </div>
   );
