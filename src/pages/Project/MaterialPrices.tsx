@@ -1,6 +1,6 @@
 export default function MaterialPrices() {
   const pageUrl =
-    'https://mlutf7-source.github.io/dftr-material-prices/';
+    'https://raw.githubusercontent.com/mlutf7-source/dftr-material-prices/main/index.html';
 
   return (
     <div>
