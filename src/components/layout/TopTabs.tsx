@@ -101,7 +101,9 @@ export default function TopTabs({
           to={tab.to}
           onClick={openTab}
           className={({ isActive }) =>
-            isActive ? 'active' : ''
+            isActive && !showProjectInfo
+              ? 'active'
+              : ''
           }
         >
           <span>{tab.icon}</span>
@@ -110,4 +112,4 @@ export default function TopTabs({
       ))}
     </nav>
   );
-}
+        }
