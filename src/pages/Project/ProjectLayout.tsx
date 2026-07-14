@@ -1,9 +1,12 @@
 import {
   Link,
   Outlet,
+  useLocation,
   useParams,
 } from 'react-router-dom';
+
 import MaterialPricesBanner from '../../components/cards/MaterialPricesBanner';
+
 import {
   useCallback,
   useEffect,
@@ -69,6 +72,13 @@ function FinanceCard({
 
 export default function ProjectLayout() {
   const { id = '' } = useParams();
+
+  const location = useLocation();
+
+  const isMaterialPricesPage =
+    location.pathname.includes(
+      '/material-prices'
+    );
 
   const [p, setP] =
     useState<Project | null>(() =>
@@ -187,95 +197,106 @@ export default function ProjectLayout() {
 
   return (
     <div className="project-page">
-  <div className="project-container">
-    <div
-      className="no-print"
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 200,
-        background: '#f3f6ff',
-        paddingTop: 6,
-        paddingBottom: 8,
-        marginBottom: 12,
-      }}
-    >
-      <TopTabs />
+      <div className="project-container">
+        <div
+          className="no-print"
+          style={{
+            position: 'sticky',
+            top: 0,
+            zIndex: 200,
+            background: '#f3f6ff',
+            paddingTop: 6,
+            paddingBottom: 8,
+            marginBottom: 12,
+          }}
+        >
+          <TopTabs />
 
-      <MaterialPricesBanner project={p} />
-    </div>
-
-    <HeroCard
-          projectName={p.name}
-          ownerName={p.ownerName}
-          projectCode={p.code}
-          status={p.status}
-          startDate={p.startDate}
-          currency="ريال يمني"
-          total={money(
-            owner.displayBalance || 0,
-            'YER'
-          )}
-        />
-
-        <div className="finance-grid">
-          <FinanceCard
-            title="حساب المالك"
-            value={
-              owner.displayBalance || 0
-            }
-            status={
-              owner.status || '-'
-            }
-            color={
-              owner.color || 'blue'
-            }
-          />
-
-          <FinanceCard
-            title="حساب المقاول"
-            value={
-              contractor.displayBalance || 0
-            }
-            status={
-              contractor.status || '-'
-            }
-            color={
-              contractor.color || 'blue'
-            }
-          />
-
-          <FinanceCard
-            title="مقاولو الباطن"
-            value={
-              subcontractors.displayBalance || 0
-            }
-            status={
-              subcontractors.status || '-'
-            }
-            color={
-              subcontractors.color || 'blue'
-            }
-          />
-
-          <FinanceCard
-            title="الصندوق"
-            value={
-              cashBox.displayBalance || 0
-            }
-            status={
-              cashBox.status || '-'
-            }
-            color={
-              cashBox.color || 'blue'
-            }
-          />
+          <MaterialPricesBanner project={p} />
         </div>
 
-        <div
-          id="page-start"
-          className="page-start-anchor"
-        />
+        {!isMaterialPricesPage && (
+          <>
+            <HeroCard
+              projectName={p.name}
+              ownerName={p.ownerName}
+              projectCode={p.code}
+              status={p.status}
+              startDate={p.startDate}
+              currency="ريال يمني"
+              total={money(
+                owner.displayBalance || 0,
+                'YER'
+              )}
+            />
+
+            <div className="finance-grid">
+              <FinanceCard
+                title="حساب المالك"
+                value={
+                  owner.displayBalance || 0
+                }
+                status={
+                  owner.status || '-'
+                }
+                color={
+                  owner.color || 'blue'
+                }
+              />
+
+              <FinanceCard
+                title="حساب المقاول"
+                value={
+                  contractor.displayBalance || 0
+                }
+                status={
+                  contractor.status || '-'
+                }
+                color={
+                  contractor.color || 'blue'
+                }
+              />
+
+              <FinanceCard
+                title="مقاولو الباطن"
+                value={
+                  subcontractors.displayBalance || 0
+                }
+                status={
+                  subcontractors.status || '-'
+                }
+                color={
+                  subcontractors.color || 'blue'
+                }
+              />
+
+              <FinanceCard
+                title="الصندوق"
+                value={
+                  cashBox.displayBalance || 0
+                }
+                status={
+                  cashBox.status || '-'
+                }
+                color={
+                  cashBox.color || 'blue'
+                }
+              />
+            </div>
+
+            <div
+              id="page-start"
+              className="page-start-anchor"
+            />
+          </>
+        )}
+
+        {isMaterialPricesPage && (
+          <div
+            id="page-start"
+            className="page-start-anchor"
+          />
+        )}
 
         <Outlet
           context={{
@@ -287,4 +308,4 @@ export default function ProjectLayout() {
       </div>
     </div>
   );
-      }
+}
