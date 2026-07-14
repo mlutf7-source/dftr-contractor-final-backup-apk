@@ -2,12 +2,15 @@ import {
   Link,
   Outlet,
   useLocation,
+  useNavigate,
   useParams,
 } from 'react-router-dom';
 
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
+  useRef,
   useState,
 } from 'react';
 
@@ -74,6 +77,16 @@ export default function ProjectLayout() {
   const { id = '' } = useParams();
 
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const fixedHeaderRef =
+    useRef<HTMLDivElement | null>(null);
+
+  const [fixedHeaderHeight, setFixedHeaderHeight] =
+    useState(80);
+
+  const [showProjectInfo, setShowProjectInfo] =
+    useState(true);
 
   const isMaterialPricesPage =
     location.pathname.includes(
@@ -129,6 +142,29 @@ export default function ProjectLayout() {
       );
     };
   }, [refreshProject]);
+
+  useLayoutEffect(() => {
+    const updateHeaderHeight = () => {
+      const height =
+        fixedHeaderRef.current?.offsetHeight || 70;
+
+      setFixedHeaderHeight(height + 12);
+    };
+
+    updateHeaderHeight();
+
+    window.addEventListener(
+      'resize',
+      updateHeaderHeight
+    );
+
+    return () => {
+      window.removeEventListener(
+        'resize',
+        updateHeaderHeight
+      );
+    };
+  }, [location.pathname]);
 
   const updateProject = (
     updated: Project
@@ -195,10 +231,41 @@ export default function ProjectLayout() {
       color: 'blue',
     };
 
+  const showProjectSummary =
+    showProjectInfo &&
+    !isMaterialPricesPage;
+
+  const showMainProjectInfo = () => {
+    setShowProjectInfo(true);
+
+    if (isMaterialPricesPage) {
+      navigate(`/project/${p.id}/owner`);
+    }
+
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }, 80);
+  };
+
+  const hideMainProjectInfo = () => {
+    setShowProjectInfo(false);
+
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }, 80);
+  };
+
   return (
     <div className="project-page">
       <div className="project-container">
         <div
+          ref={fixedHeaderRef}
           className="no-print"
           style={{
             position: 'fixed',
@@ -212,20 +279,24 @@ export default function ProjectLayout() {
               '0 8px 18px rgba(15, 23, 42, .12)',
           }}
         >
-          <TopTabs />
-
-          <MaterialPricesBanner project={p} />
+          <TopTabs
+            showProjectInfo={showProjectSummary}
+            onShowProjectInfo={showMainProjectInfo}
+            onHideProjectInfo={hideMainProjectInfo}
+          />
         </div>
 
         <div
           className="no-print"
           style={{
-            height: 170,
+            height: fixedHeaderHeight,
           }}
         />
 
-        {!isMaterialPricesPage && (
+        {showProjectSummary && (
           <>
+            <MaterialPricesBanner project={p} />
+
             <HeroCard
               projectName={p.name}
               ownerName={p.ownerName}
@@ -299,7 +370,8 @@ export default function ProjectLayout() {
           id="page-start"
           className="page-start-anchor"
           style={{
-            scrollMarginTop: 175,
+            scrollMarginTop:
+              fixedHeaderHeight,
           }}
         />
 
@@ -313,4 +385,4 @@ export default function ProjectLayout() {
       </div>
     </div>
   );
-      }
+  }
