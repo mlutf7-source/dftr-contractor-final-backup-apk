@@ -4,6 +4,7 @@ import {
 } from 'react';
 
 import {
+  useLocation,
   useNavigate,
 } from 'react-router-dom';
 
@@ -27,6 +28,14 @@ export default function MaterialPricesBanner({
 }: Props) {
   const navigate =
     useNavigate();
+
+  const location =
+    useLocation();
+
+  const isPricesPage =
+    location.pathname.includes(
+      '/material-prices'
+    );
 
   const [prices, setPrices] =
     useState<MaterialPrice[]>([]);
@@ -52,6 +61,10 @@ export default function MaterialPricesBanner({
   useEffect(() => {
     load();
   }, []);
+
+  if (isPricesPage) {
+    return null;
+  }
 
   const highlights =
     getBannerHighlights(prices);
