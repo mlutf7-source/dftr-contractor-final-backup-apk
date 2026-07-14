@@ -187,12 +187,25 @@ export default function ProjectLayout() {
 
   return (
     <div className="project-page">
-      <div className="project-container">
-        <TopTabs />
-<TopTabs />
+  <div className="project-container">
+    <div
+      className="no-print"
+      style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 200,
+        background: '#f3f6ff',
+        paddingTop: 6,
+        paddingBottom: 8,
+        marginBottom: 12,
+      }}
+    >
+      <TopTabs />
 
-<MaterialPricesBanner project={p} />
-        <HeroCard
+      <MaterialPricesBanner project={p} />
+    </div>
+
+    <HeroCard
           projectName={p.name}
           ownerName={p.ownerName}
           projectCode={p.code}
