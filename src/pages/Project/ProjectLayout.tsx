@@ -5,13 +5,13 @@ import {
   useParams,
 } from 'react-router-dom';
 
-import MaterialPricesBanner from '../../components/cards/MaterialPricesBanner';
-
 import {
   useCallback,
   useEffect,
   useState,
 } from 'react';
+
+import MaterialPricesBanner from '../../components/cards/MaterialPricesBanner';
 
 import type { Project } from '../../models/types';
 
@@ -283,20 +283,13 @@ export default function ProjectLayout() {
                 }
               />
             </div>
-
-            <div
-              id="page-start"
-              className="page-start-anchor"
-            />
           </>
         )}
 
-        {isMaterialPricesPage && (
-          <div
-            id="page-start"
-            className="page-start-anchor"
-          />
-        )}
+        <div
+          id="page-start"
+          className="page-start-anchor"
+        />
 
         <Outlet
           context={{
@@ -308,4 +301,4 @@ export default function ProjectLayout() {
       </div>
     </div>
   );
-}
+      }
